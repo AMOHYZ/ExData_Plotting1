@@ -1,0 +1,18 @@
+library(data.table)
+Data <- fread("/Users/AMOHY/household_power_consumption.txt",integer64 = "character")
+Data <- as.data.frame(Data)
+Data1 <- subset(Data,Data$Date=="1/2/2007" | Data$Date=="2/2/2007" )
+Time<- paste(Data1$Date,Data1$Time)
+Data1$Time <- Time
+par(mfrow = c(2, 2), mar = c(4, 4, 2, 1), oma = c(0, 0, 2, 0))
+with(Data1,{
+    plot(strptime(Time, '%d/%m/%Y %H:%M:%S'),as.numeric(Data1$Global_active_power),xlab='',ylab = "Global Active Power (kilowatts)",type="S")
+    plot(strptime(Time, '%d/%m/%Y %H:%M:%S'),as.numeric(Data1$Voltage),xlab='',ylab = "Voltage",type="S")
+    plot(strptime(Time, '%d/%m/%Y %H:%M:%S'),as.numeric(Data1$Sub_metering_1),xlab='',ylab = "Energy sub metering",type="S")
+    points(strptime(Time, '%d/%m/%Y %H:%M:%S'),as.numeric(Data1$Sub_metering_2),col='red',type="S")
+    points(strptime(Time, '%d/%m/%Y %H:%M:%S'),as.numeric(Data1$Sub_metering_3),col='blue',type="S")
+    legend('topright',bty="n",lwd=c(2.5,2.5),col=c("black","red","blue"),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
+    plot(strptime(Time, '%d/%m/%Y %H:%M:%S'),as.numeric(Data1$Global_reactive_power),xlab='',ylab = "Global_reactive_power (kilowatts)",type="S")
+})
+dev.copy(png,file="plot4.png")
+dev.off()
